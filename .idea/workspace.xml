@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7e141777-6ca8-4af9-bb1e-63b265450778" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/CardTrancferfSystem.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/uz/waxa/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/uz/waxa/data/DataBase.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/uz/waxa/service/Registration.java" afterDir="false" />
-    </list>
+    <list default="true" id="7e141777-6ca8-4af9-bb1e-63b265450778" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,6 +9,11 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/uz/waxa/data/DataBase.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/uz/waxa/Main.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/uz/waxa/service/Registration.java" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />

@@ -1,0 +1,281 @@
+Index: src/uz/waxa/service/Registration.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package uz.waxa.service;\r\n\r\nimport uz.waxa.data.DataBase;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\nimport java.util.Scanner;\r\n\r\n\r\npublic class Registration extends DataBase {\r\n    private String firstName;\r\n    private String lastName;\r\n    private String cardNumber;\r\n    private String password;\r\n    private double balance=0;\r\n\r\n    public static List<Registration> list=new ArrayList<>();\r\n\r\n    public Registration() {\r\n    }\r\n\r\n    public String getCardNumber() {\r\n        return cardNumber;\r\n    }\r\n\r\n    public double getBalance() {\r\n        return balance;\r\n    }\r\n\r\n    public Registration(String firstName, String lastName, String cardNumber, String password) {\r\n        this.firstName = firstName;\r\n        this.lastName = lastName;\r\n        this.cardNumber = cardNumber;\r\n        this.password=password;\r\n    }\r\n    Scanner scanner=new Scanner(System.in);\r\n    public void reg(){\r\n        System.out.print(\"First Name: \");\r\n        firstName=scanner.next();\r\n        System.out.print(\"Last Name: \");\r\n        lastName=scanner.next();\r\n        System.out.print(\"Card Number: \");\r\n        cardNumber=scanner.next();\r\n        System.out.print(\"Create Password: \");\r\n        password=scanner.next();\r\n        Registration r1=new Registration(firstName,lastName,cardNumber,password);\r\n        list.add(r1);\r\n    }\r\n\r\n    public  void signIn(){\r\n        boolean isEnter=true;\r\n        System.out.print(\"Card Number: \");\r\n        String CardNumber=scanner.next();\r\n        System.out.print(\"Password: \");\r\n        String CardPassword=scanner.next();\r\n        for (int i = 0; i <list.size() ; i++) {\r\n                    if (list.get(i).cardNumber.equals(CardNumber) && list.get(i).password.equals(CardPassword)) {\r\n                        System.out.println(\"----------------------Card Balance Transfer System---------------------------\");\r\n                        boolean run =true;\r\n                        isEnter=false;\r\n                        while (run) {\r\n                            System.out.println(\"Choose Options: \");\r\n                            System.out.println(\"1->Balance\");\r\n                            System.out.println(\"2->Transfer Balance\");\r\n                            System.out.println(\"3->Fill Card Balance\");\r\n                            System.out.println(\"4->Ask Credit\");\r\n                            System.out.println(\"0->Exit\");\r\n                            int n = scanner.nextInt();\r\n                            switch (n) {\r\n                                case 0->{ run = false;}\r\n                                case 1 -> {\r\n                                    System.out.print(\"Card Password: \");\r\n                                    String cardPassword=scanner.next();\r\n                                    System.out.print(\"Card Number:\");\r\n                                    String Cardnumber = scanner.next();\r\n                                    getBalance(cardPassword,Cardnumber);\r\n                                }\r\n                                case 2 -> {\r\n                                    System.out.println(\"------------------Transfer Balance To Other Card------------------\");\r\n                                    System.out.print(\"Enter The Card Number: \");\r\n                                    String otherCard=scanner.next();\r\n                                    System.out.print(\"Password: \");\r\n                                    String Password=scanner.next();\r\n                                    System.out.print(\"Transfer Balance: \");\r\n                                    double transferBalance=scanner.nextDouble();\r\n                                    transferTo(otherCard,Password,transferBalance);\r\n                                }\r\n                                case 3 -> {\r\n                                    System.out.print(\"Card Password: \");\r\n                                    String Password=scanner.next();\r\n                                    System.out.print(\"Card Number: \");\r\n                                    String cardNumber=scanner.next();\r\n                                    System.out.print(\"How much money Filled:\");\r\n                                    double fillMoney=scanner.nextDouble();\r\n                                    fillBalance(Password, fillMoney,cardNumber);\r\n                                }\r\n                                case 4 -> {}\r\n\r\n                                default -> {\r\n                                    System.out.println(\"There is not choose option!\");\r\n                                }\r\n                            }\r\n\r\n                        }\r\n                    }\r\n            }\r\n       if(isEnter){\r\n           System.out.println(\"There is not card\");\r\n       }\r\n    }\r\n\r\n    public void getBalance(String CardPassword,String Cardnumber) {\r\n        boolean isTrue = true;\r\n        for (int i = 0; i < list.size(); i++) {\r\n            if (list.get(i).password.equals(CardPassword)) {\r\n                if (list.get(i).cardNumber.equals(Cardnumber)) {\r\n                    isTrue = false;\r\n                    balance = list.get(i).balance;\r\n                    System.out.print(\"Balance=\");\r\n                    System.out.println(balance);\r\n                }\r\n            }\r\n\r\n        }  if(isTrue){\r\n            System.out.println(\"Incorrect Password\");\r\n        }\r\n    }\r\n\r\n    public  void fillBalance(String CardPassword,double amount,String Cardnumber){\r\n        boolean isTrue=true;\r\n        for (int i = 0; i < list.size(); i++) {\r\n            if (list.get(i).password.equals(CardPassword)) {\r\n                if(list.get(i).cardNumber.equals(Cardnumber)){\r\n                isTrue=false;\r\n                    list.get(i).balance=list.get(i).balance+amount;\r\n                    System.out.print(\"Filled Balance=\");System.out.print(list.get(i).balance);\r\n                }\r\n            }\r\n        }\r\n        if(isTrue){\r\n            System.out.println(\"Incorrect!!\");\r\n\r\n        }\r\n\r\n\r\n    }\r\n\r\n    public void transferTo(String otherCard,String Password,double transferBalance){\r\n        boolean isTrue=true;\r\n        for (int i = 0; i <list.size(); i++) {\r\n            if(list.get(i).cardNumber.equals(otherCard) && list.get(i).password.equals(Password)){\r\n//                if(list.get(i).balance!=0){\r\n                list.get(i).balance+=transferBalance;\r\n                balance-=transferBalance;\r\n                System.out.println(\"Successfully Transferred!!!\");\r\n                isTrue=false;\r\n//            }else {\r\n//                    System.out.println(\"There is not enough money!!\");\r\n//                }\r\n            }\r\n        }if(isTrue){\r\n            System.out.println(\"Error!!!\");\r\n        }\r\n\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/uz/waxa/service/Registration.java b/src/uz/waxa/service/Registration.java
+--- a/src/uz/waxa/service/Registration.java	(revision b95143173b5d8a65143cd2023ede34a8b519b101)
++++ b/src/uz/waxa/service/Registration.java	(date 1657047734759)
+@@ -81,9 +81,11 @@
+                                     String otherCard=scanner.next();
+                                     System.out.print("Password: ");
+                                     String Password=scanner.next();
++                                    System.out.print("Moment card: ");
++                                    String nowCard=scanner.next();
+                                     System.out.print("Transfer Balance: ");
+                                     double transferBalance=scanner.nextDouble();
+-                                    transferTo(otherCard,Password,transferBalance);
++                                    transferTo(otherCard,Password,nowCard,transferBalance);
+                                 }
+                                 case 3 -> {
+                                     System.out.print("Card Password: ");
+@@ -92,7 +94,7 @@
+                                     String cardNumber=scanner.next();
+                                     System.out.print("How much money Filled:");
+                                     double fillMoney=scanner.nextDouble();
+-                                    fillBalance(Password, fillMoney,cardNumber);
++                                    fillBalance(Password,fillMoney,cardNumber);
+                                 }
+                                 case 4 -> {}
+ 
+@@ -131,7 +133,7 @@
+         for (int i = 0; i < list.size(); i++) {
+             if (list.get(i).password.equals(CardPassword)) {
+                 if(list.get(i).cardNumber.equals(Cardnumber)){
+-                isTrue=false;
++                    isTrue=false;
+                     list.get(i).balance=list.get(i).balance+amount;
+                     System.out.print("Filled Balance=");System.out.print(list.get(i).balance);
+                 }
+@@ -145,18 +147,18 @@
+ 
+     }
+ 
+-    public void transferTo(String otherCard,String Password,double transferBalance){
++    public void transferTo(String otherCard, String Password, String nowCard, double transferBalance){
+         boolean isTrue=true;
+         for (int i = 0; i <list.size(); i++) {
+             if(list.get(i).cardNumber.equals(otherCard) && list.get(i).password.equals(Password)){
+-//                if(list.get(i).balance!=0){
++                if(list.get(i).balance!=0&& balance>transferBalance){
+                 list.get(i).balance+=transferBalance;
+                 balance-=transferBalance;
+                 System.out.println("Successfully Transferred!!!");
+                 isTrue=false;
+-//            }else {
+-//                    System.out.println("There is not enough money!!");
+-//                }
++            }else {
++                    System.out.println("There is not enough money!!");
++                }
+             }
+         }if(isTrue){
+             System.out.println("Error!!!");
+Index: .idea/CardBalanceTransferSystem.iml
+===================================================================
+diff --git a/.idea/CardBalanceTransferSystem.iml b/.idea/CardBalanceTransferSystem.iml
+deleted file mode 100644
+--- a/.idea/CardBalanceTransferSystem.iml	(revision b95143173b5d8a65143cd2023ede34a8b519b101)
++++ /dev/null	(revision b95143173b5d8a65143cd2023ede34a8b519b101)
+@@ -1,9 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<module type="JAVA_MODULE" version="4">
+-  <component name="NewModuleRootManager" inherit-compiler-output="true">
+-    <exclude-output />
+-    <content url="file://$MODULE_DIR$" />
+-    <orderEntry type="inheritedJdk" />
+-    <orderEntry type="sourceFolder" forTests="false" />
+-  </component>
+-</module>
+\ No newline at end of file
+Index: .idea/vcs.xml
+===================================================================
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+deleted file mode 100644
+--- a/.idea/vcs.xml	(revision b95143173b5d8a65143cd2023ede34a8b519b101)
++++ /dev/null	(revision b95143173b5d8a65143cd2023ede34a8b519b101)
+@@ -1,6 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="VcsDirectoryMappings">
+-    <mapping directory="" vcs="Git" />
+-  </component>
+-</project>
+\ No newline at end of file
+Index: .idea/.gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/.gitignore b/.idea/.gitignore
+--- a/.idea/.gitignore	(revision b95143173b5d8a65143cd2023ede34a8b519b101)
++++ b/.idea/.gitignore	(date 1657022290705)
+@@ -1,0 +1,3 @@
++# Default ignored files
++/shelf/
++/workspace.xml
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"7e141777-6ca8-4af9-bb1e-63b265450778\" name=\"Changes\" comment=\"\">\r\n      <change afterPath=\"$PROJECT_DIR$/CardTrancferfSystem.iml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/uz/waxa/Main.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/uz/waxa/data/DataBase.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/uz/waxa/service/Registration.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"MarkdownSettingsMigration\">\r\n    <option name=\"stateVersion\" value=\"1\" />\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"2BWVHqcfEKmXQ0xbLDi1A4Yufyi\" />\r\n  <component name=\"ProjectLevelVcsManager\">\r\n    <ConfirmationsSetting value=\"2\" id=\"Add\" />\r\n  </component>\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">\r\n    <property name=\"ASKED_ADD_EXTERNAL_FILES\" value=\"true\" />\r\n    <property name=\"RunOnceActivity.OpenProjectViewOnStart\" value=\"true\" />\r\n    <property name=\"RunOnceActivity.ShowReadmeOnStart\" value=\"true\" />\r\n    <property name=\"last_opened_file_path\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"7e141777-6ca8-4af9-bb1e-63b265450778\" name=\"Changes\" comment=\"\" />\r\n      <created>1657021743380</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1657021743380</updated>\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <option name=\"ADD_EXTERNAL_FILES_SILENTLY\" value=\"true\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision b95143173b5d8a65143cd2023ede34a8b519b101)
++++ b/.idea/workspace.xml	(date 1657045877230)
+@@ -1,60 +1,92 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="ChangeListManager">
+-    <list default="true" id="7e141777-6ca8-4af9-bb1e-63b265450778" name="Changes" comment="">
+-      <change afterPath="$PROJECT_DIR$/CardTrancferfSystem.iml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/uz/waxa/Main.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/uz/waxa/data/DataBase.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/uz/waxa/service/Registration.java" afterDir="false" />
+-    </list>
++    <list default="true" id="12ae67a2-c44b-44f6-9406-9b55ece047c2" name="Changes" comment="" />
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+     <option name="LAST_RESOLUTION" value="IGNORE" />
+   </component>
+-  <component name="Git.Settings">
+-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
++  <component name="FileTemplateManagerImpl">
++    <option name="RECENT_TEMPLATES">
++      <list>
++        <option value="Interface" />
++        <option value="Class" />
++      </list>
++    </option>
++  </component>
++  <component name="GitSEFilterConfiguration">
++    <file-type-list>
++      <filtered-out-file-type name="LOCAL_BRANCH" />
++      <filtered-out-file-type name="REMOTE_BRANCH" />
++      <filtered-out-file-type name="TAG" />
++      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
++    </file-type-list>
++  </component>
++  <component name="HighlightingSettingsPerFile">
++    <setting file="file://$PROJECT_DIR$/src/uz/waxa/data/DataBase.java" root0="FORCE_HIGHLIGHTING" />
++    <setting file="file://$PROJECT_DIR$/src/uz/waxa/service/Registration.java" root0="FORCE_HIGHLIGHTING" />
++    <setting file="file://$PROJECT_DIR$/src/uz/waxa/Main.java" root0="FORCE_HIGHLIGHTING" />
+   </component>
+   <component name="MarkdownSettingsMigration">
+     <option name="stateVersion" value="1" />
+   </component>
+-  <component name="ProjectId" id="2BWVHqcfEKmXQ0xbLDi1A4Yufyi" />
+-  <component name="ProjectLevelVcsManager">
+-    <ConfirmationsSetting value="2" id="Add" />
+-  </component>
++  <component name="ProjectId" id="2BWWNWOTDGbQfFAeEr4onfLGN1v" />
+   <component name="ProjectViewState">
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+   <component name="PropertiesComponent">
+-    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
++    <property name="project.structure.last.edited" value="Modules" />
++    <property name="project.structure.proportion" value="0.0" />
++    <property name="project.structure.side.proportion" value="0.0" />
++  </component>
++  <component name="RunManager" selected="Application.Main">
++    <configuration name="Card" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
++      <option name="MAIN_CLASS_NAME" value="uz.waxa.Card" />
++      <module name="CardTrancferfSystem" />
++      <extension name="coverage">
++        <pattern>
++          <option name="PATTERN" value="uz.waxa.data.*" />
++          <option name="ENABLED" value="true" />
++        </pattern>
++      </extension>
++      <method v="2">
++        <option name="Make" enabled="true" />
++      </method>
++    </configuration>
++    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
++      <option name="MAIN_CLASS_NAME" value="uz.waxa.Main" />
++      <module name="CardTrancferfSystem" />
++      <extension name="coverage">
++        <pattern>
++          <option name="PATTERN" value="uz.waxa.*" />
++          <option name="ENABLED" value="true" />
++        </pattern>
++      </extension>
++      <method v="2">
++        <option name="Make" enabled="true" />
++      </method>
++    </configuration>
++    <recent_temporary>
++      <list>
++        <item itemvalue="Application.Main" />
++        <item itemvalue="Application.Card" />
++      </list>
++    </recent_temporary>
+   </component>
+   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+   <component name="TaskManager">
+     <task active="true" id="Default" summary="Default task">
+-      <changelist id="7e141777-6ca8-4af9-bb1e-63b265450778" name="Changes" comment="" />
+-      <created>1657021743380</created>
++      <changelist id="12ae67a2-c44b-44f6-9406-9b55ece047c2" name="Changes" comment="" />
++      <created>1657022285380</created>
+       <option name="number" value="Default" />
+       <option name="presentableId" value="Default" />
+-      <updated>1657021743380</updated>
++      <updated>1657022285380</updated>
+     </task>
+     <servers />
+   </component>
+-  <component name="Vcs.Log.Tabs.Properties">
+-    <option name="TAB_STATES">
+-      <map>
+-        <entry key="MAIN">
+-          <value>
+-            <State />
+-          </value>
+-        </entry>
+-      </map>
+-    </option>
+-  </component>
+-  <component name="VcsManagerConfiguration">
+-    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+-  </component>
+ </project>
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectRootManager\" version=\"2\" project-jdk-name=\"openjdk-18\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/out\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision b95143173b5d8a65143cd2023ede34a8b519b101)
++++ b/.idea/misc.xml	(date 1657022286239)
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="ProjectRootManager" version="2" project-jdk-name="openjdk-18" project-jdk-type="JavaSDK">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_X" default="true" project-jdk-name="openjdk-18" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/out" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectModuleManager\">\r\n    <modules>\r\n      <module fileurl=\"file://$PROJECT_DIR$/.idea/CardBalanceTransferSystem.iml\" filepath=\"$PROJECT_DIR$/.idea/CardBalanceTransferSystem.iml\" />\r\n    </modules>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/modules.xml b/.idea/modules.xml
+--- a/.idea/modules.xml	(revision b95143173b5d8a65143cd2023ede34a8b519b101)
++++ b/.idea/modules.xml	(date 1657022286177)
+@@ -2,7 +2,7 @@
+ <project version="4">
+   <component name="ProjectModuleManager">
+     <modules>
+-      <module fileurl="file://$PROJECT_DIR$/.idea/CardBalanceTransferSystem.iml" filepath="$PROJECT_DIR$/.idea/CardBalanceTransferSystem.iml" />
++      <module fileurl="file://$PROJECT_DIR$/CardTrancferfSystem.iml" filepath="$PROJECT_DIR$/CardTrancferfSystem.iml" />
+     </modules>
+   </component>
+ </project>
+\ No newline at end of file
